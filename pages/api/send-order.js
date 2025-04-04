@@ -86,7 +86,8 @@ export default async function handler(req, res) {
 
         const emailResponse = await resend.emails.send({
             from: 'Pedidos Pizza <contacto@napolitanospizza.cl>',
-            to: ['alfredo@sodired.cl'],
+            to: ['ignacio.rivera.rojo@gmail.com'],
+            cc: ['alfredo@sodired.cl'],
             subject: 'Nuevo Pedido Web 🍕',
             html: emailContent
         });

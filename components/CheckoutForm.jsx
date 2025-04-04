@@ -26,7 +26,7 @@ const CheckoutForm = ({ cart, onCancel }) => {
             address: 'Avenida Rica Aventura #11780',
             deliveryOption: deliveryType,
             schedule: pickupTime,
-            foodtruckNumber: '56963424158'
+            foodtruckNumber: '56977036826'
           },
           cart,
         }),
