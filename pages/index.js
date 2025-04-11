@@ -13,7 +13,7 @@ export default function Home() {
 
     // Precios según tamaño
     const pizzaOptions = {
-        Margarita: { Personal: 5000, Compartida: 8500 },
+        Margarita: { Personal: 500, Compartida: 8500 },
         Pepperoni: { Personal: 9500, Compartida: 14000 },
         Napolitana: { Personal: 10000, Compartida: 15000 },
         "Del Huerto": { Personal: 6000, Compartida: 10500 },

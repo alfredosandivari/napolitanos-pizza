@@ -3,50 +3,55 @@ import { useState } from 'react';
 const CheckoutForm = ({ cart, onCancel }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [deliveryType, setDeliveryType] = useState('inmediato');
   const [pickupTime, setPickupTime] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handlePayment = async () => {
-    if (!name || !phone) {
-      alert('Por favor completa tu nombre y número de WhatsApp');
+    if (!name || !phone || !email) {
+      alert('Por favor completa todos los campos: nombre, WhatsApp y correo electrónico');
       return;
-    }
+    }    
   
     setLoading(true);
   
     try {
-      const res = await fetch('/api/send-order', {
+      const orderInfo = {
+        customer: {
+          name,
+          phone,
+          email,
+          address: 'Avenida Rica Aventura #11780',
+          deliveryOption: deliveryType,
+          schedule: pickupTime,
+          foodtruckNumber: '56963424158',
+        },
+        cart,
+      };
+  
+      localStorage.setItem('pendingOrder', JSON.stringify(orderInfo));
+  
+      // ✅ Aquí va completo el cuerpo con customer + cart
+      const prefRes = await fetch('/api/create-preference', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customer: {
-            name: name,
-            phone: phone,
-            address: 'Avenida Rica Aventura #11780',
-            deliveryOption: deliveryType,
-            schedule: pickupTime,
-            foodtruckNumber: '56977036826'
-          },
-          cart,
-        }),
+        body: JSON.stringify(orderInfo), // antes solo mandabas { cart }
       });
   
-      const data = await res.json();
+      const prefData = await prefRes.json();
   
-      if (data.success) {
-        // Guardar en localStorage y redirigir
-        localStorage.setItem('lastOrder', JSON.stringify(cart));
-        window.location.href = '/success';
-      } else {
-        console.error('Error backend:', data.error);
-        alert('No se pudo enviar el pedido. Intenta nuevamente.');
+      if (!prefData.init_point) {
+        alert('Error al iniciar el pago. Intenta más tarde.');
         setLoading(false);
+        return;
       }
   
+      window.location.href = prefData.init_point;
+  
     } catch (error) {
-      console.error('Error al enviar pedido:', error);
-      alert('Error interno al enviar pedido');
+      console.error('Error al procesar pago:', error);
+      alert('Error interno al procesar pago');
       setLoading(false);
     }
   };
@@ -68,7 +73,7 @@ const CheckoutForm = ({ cart, onCancel }) => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">WhatsApp</label>
+        <label className="block text-sm font-medium mb-1">WhatsApp / Cel</label>
         <input
           type="tel"
           value={phone}
@@ -77,6 +82,19 @@ const CheckoutForm = ({ cart, onCancel }) => {
           placeholder="Ej: +56912345678"
         />
       </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1">Correo electrónico</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full border rounded px-3 py-2"
+          placeholder="Ej: nombre@correo.com"
+          required
+        />
+      </div>
+
 
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">¿Cómo quieres retirar tu pedido?</label>
