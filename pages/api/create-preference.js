@@ -32,10 +32,9 @@ export default async function handler(req, res) {
     },    
     auto_return: 'approved',
     metadata: {
-      customer_name: customer.name,
-      delivery: customer.deliveryOption,
-      schedule: customer.schedule || '',
-    },
+      customer,
+      cart,
+    },    
     notification_url: 'https://napolitanos-pizza.vercel.app/api/webhook' // opcional para futuro
   };
 
