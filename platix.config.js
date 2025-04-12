@@ -2,8 +2,9 @@ export const foodtrucks = {
     napolitanos: {
         id: 'napolitanos',
         nombre: 'Napolitanos Pizza',
-        telefono: '56963424158',
-        email: 'contacto@napolitanospizza.cl',
+        dominio: 'napolitanospizza.cl',
+        telefono: '56977036826',
+        email: 'ignacio.rivera.rojo@gmail.com',
         logo: '/logos/napolitanos.png',
         color: '#e30910',
         template: 'pedido_confirmado_2025',
@@ -196,6 +197,7 @@ export const foodtrucks = {
     sandwichgeorge: {
         id: 'sandwichgeorge',
         nombre: 'Sandwich George',
+        dominio: 'sandwichgeorge.cl',
         telefono: '56987654321',
         email: 'sandwichgeorge@completos.cl',
         logo: '/logos/george.png',

@@ -84,11 +84,11 @@ export default async function handler(req, res) {
 
     // CORREO ADMIN
     await resend.emails.send({
-      from: `Pedidos Platix <contacto@platix.app>`,
+      from: `Pedidos ${config.nombre} <${config.email}>`,
       to: [config.email],
       cc: ['alfredo@sodired.cl'],
       subject: `Nuevo pedido en ${config.nombre} 🍕`,
-      html: `
+      html:  `
         <h2>Nuevo pedido recibido en ${config.nombre}</h2>
         <p><strong>Nombre:</strong> ${customer.name}</p>
         <p><strong>Teléfono:</strong> ${customer.phone}</p>
@@ -101,8 +101,9 @@ export default async function handler(req, res) {
     // CORREO CLIENTE
     if (customer.email) {
       await resend.emails.send({
-        from: `${config.nombre} 🍕 <contacto@platix.app>`,
+        from: `Pedidos ${config.nombre} <${config.email}>`,
         to: [customer.email],
+        cc: ['alfredo@sodired.cl'],
         subject: `¡Gracias por tu pedido en ${config.nombre}!`,
         html: `
           <div style="font-family: sans-serif; text-align: center; padding: 20px; background-color: #1e1e1e; color: #f3f3f3; border-radius: 10px;">
