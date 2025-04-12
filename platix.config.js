@@ -151,7 +151,7 @@ export const foodtrucks = {
                 desc: 'Pizza con base de salsa pomodoro, mozzarella, mitad salame y mitad pepperoni con jamón artesanal, tomate y aceitunas negras.',
                 image: '/pizzas/napolitana.jpg',
                 options: {
-                    size: ['Personal', 'Compartida']
+                    size: ['Personal', 'Compartida'],
                 }
             },
             {
@@ -159,8 +159,7 @@ export const foodtrucks = {
                 name: 'Bebida 1.5L',
                 price: 2800,
                 desc: 'Botella de bebida fría 1.5L para compartir.',
-                image: '/pizzas/bebida.jpg',
-                size: '1.5 L',
+                image: '/pizzas/bebidas1medio.png',
                 options: {
                     flavor: ['Coca-Cola', 'Fanta', 'Sprite', 'Pepsi', 'Pepsi Zero', 'Limon Soda']
                 }
@@ -170,8 +169,7 @@ export const foodtrucks = {
                 name: 'Bebida Lata',
                 price: 1500,
                 desc: 'Bebida individual en formato lata, bien helada.',
-                image: '/pizzas/bebida.jpg',
-                size: 'Lata',
+                image: '/pizzas/bebidaslata.jpg',
                 options: {
                     flavor: ['Coca-Cola', 'Fanta', 'Sprite', 'Pepsi', 'Pepsi Zero', 'Limon Soda']
                 }
