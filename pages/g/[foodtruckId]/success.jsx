@@ -1,34 +1,53 @@
-// pages/success.jsx
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { foodtrucks } from '@/platix.config';
 
 export default function SuccessPage() {
+  const router = useRouter();
+  const [config, setConfig] = useState(null);
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    const storedOrder = localStorage.getItem('pendingOrder');
-    if (storedOrder) {
+    if (!router.isReady) return;
+
+    const { foodtruckId } = router.query;
+    const id = Array.isArray(foodtruckId) ? foodtruckId[0] : foodtruckId;
+    const found = foodtrucks[id];
+
+    if (found) {
+      setConfig(found);
+    }
+
+    const stored = localStorage.getItem('pendingOrder');
+    if (stored) {
       try {
-        const parsed = JSON.parse(storedOrder);
+        const parsed = JSON.parse(stored);
         setCart(parsed.cart || []);
-        // Solo visual: no disparar más el pedido
         localStorage.removeItem('pendingOrder');
-      } catch (err) {
-        console.error('Error al leer pendingOrder:', err);
+      } catch (e) {
+        console.error('Error al leer carrito:', e);
       }
     }
-  }, []);
+  }, [router.isReady, router.query]);
+
+  if (!config) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Cargando confirmación...</p>
+      </div>
+    );
+  }
 
   const total = cart.reduce((acc, item) => acc + (item.price || 0), 0);
 
   return (
     <div className="min-h-screen bg-green-50 flex flex-col items-center justify-center text-center px-4 py-12">
       <h1 className="text-4xl font-bold text-green-700 mb-4">🎉 ¡Pedido realizado con éxito!</h1>
-      <p className="text-lg text-gray-700 mb-6">
-        Gracias por tu compra. Tu pedido fue recibido y está siendo preparado con amor 🍕
+      <p className="text-lg text-gray-700 mb-2">
+        Gracias por tu compra. El equipo de <strong>{config.nombre}</strong> ya está preparando tu pedido 🍕
       </p>
       <p className="text-sm text-gray-600 mb-6">
-        Te enviamos un correo con los detalles de tu pedido. ¡Nos vemos pronto! 🍕
+        Te enviamos un correo con los detalles. ¡Nos vemos pronto!
       </p>
 
       <div className="bg-white shadow-md rounded-lg p-6 max-w-md w-full">
@@ -44,10 +63,6 @@ export default function SuccessPage() {
           Total: ${total.toLocaleString('es-CL')}
         </div>
       </div>
-
-      <Link href="/" className="mt-8 inline-block bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 transition">
-        Volver al inicio
-      </Link>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const CheckoutForm = ({ cart, onCancel }) => {
+const CheckoutForm = ({ cart, onCancel, config, foodtruckId }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -12,50 +12,47 @@ const CheckoutForm = ({ cart, onCancel }) => {
     if (!name || !phone || !email) {
       alert('Por favor completa todos los campos: nombre, WhatsApp y correo electrónico');
       return;
-    }    
-  
+    }
+
     setLoading(true);
-  
+
     try {
-      const orderInfo = {
-        customer: {
-          name,
-          phone,
-          email,
-          address: 'Avenida Rica Aventura #11780',
-          deliveryOption: deliveryType,
-          schedule: pickupTime,
-          foodtruckNumber: '56963424158',
-        },
-        cart,
-      };
-  
-      localStorage.setItem('pendingOrder', JSON.stringify(orderInfo));
-  
-      // ✅ Aquí va completo el cuerpo con customer + cart
+      // Guardamos solo el carrito en localStorage para mostrar en success
+      localStorage.setItem('pendingOrder', JSON.stringify({ cart }));
+
       const prefRes = await fetch('/api/create-preference', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderInfo), // antes solo mandabas { cart }
+        body: JSON.stringify({
+          customer: {
+            name,
+            phone,
+            email,
+            address: 'Avenida Rica Aventura #11780',
+            deliveryOption: deliveryType,
+            schedule: pickupTime,
+            foodtruckNumber: config.telefono,
+          },
+          cart,
+          foodtruck_id: foodtruckId,
+        }),
       });
-  
+
       const prefData = await prefRes.json();
-  
+
       if (!prefData.init_point) {
         alert('Error al iniciar el pago. Intenta más tarde.');
         setLoading(false);
         return;
       }
-  
+
       window.location.href = prefData.init_point;
-  
     } catch (error) {
       console.error('Error al procesar pago:', error);
       alert('Error interno al procesar pago');
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="bg-white p-6 md:p-8 rounded-lg shadow-md w-full max-w-md mx-auto my-8">
@@ -94,7 +91,6 @@ const CheckoutForm = ({ cart, onCancel }) => {
           required
         />
       </div>
-
 
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">¿Cómo quieres retirar tu pedido?</label>

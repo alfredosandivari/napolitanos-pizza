@@ -109,11 +109,12 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="bg-red-600 py-8">
-                <h2 className="text-center text-white text-2xl md:text-3xl font-bold tracking-wide">
-                    🎉 ¡Ven a disfrutar de la mejor pizza, música y ambiente en Patio Rica Aventura! 🍕🎶
-                </h2>
-            </section>
+            {/* Franja */}
+      <section className="bg-red-600 py-8">
+        <h2 className="text-center text-white text-2xl md:text-3xl font-bold tracking-wide">
+          🎉 ¡Ven a disfrutar de la mejor pizza, música y ambiente en Patio Rica Aventura!  🍕🎶
+        </h2>
+      </section>
 
             
             <section id="menu" className="py-16 px-8 max-w-5xl mx-auto">
