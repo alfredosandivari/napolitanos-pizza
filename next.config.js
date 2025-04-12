@@ -1,11 +1,8 @@
+const { domainToFoodtruck } = require('./lib/domain-mapping');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-};
-
-const { domainToFoodtruck } = require('./lib/domain-mapping');
-
-module.exports = {
   async rewrites() {
     const rules = Object.entries(domainToFoodtruck).map(([domain, id]) => ({
       source: '/',
@@ -17,6 +14,4 @@ module.exports = {
   },
 };
 
-
-
-export default nextConfig;
+module.exports = nextConfig;
