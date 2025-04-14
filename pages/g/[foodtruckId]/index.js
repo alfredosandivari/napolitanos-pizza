@@ -29,8 +29,32 @@ export default function FoodtruckPage() {
         if (found) setConfig(found);
     }, [router.isReady, router.query]);
 
-    const addToCart = (name, size, flavor = null, price) => {
-        setCart([...cart, { name, size, flavor, price }]);
+    const addToCart = (name, size, flavor, price) => {
+        const newItem = {
+            id: `${name}-${size || ''}-${flavor || ''}`,
+            name,
+            size,
+            flavor,
+            price,
+            quantity: 1
+        };
+
+        setCart(prev => {
+            const existing = prev.find(
+                item =>
+                    item.name === newItem.name &&
+                    item.size === newItem.size &&
+                    item.flavor === newItem.flavor
+            );
+
+            if (existing) {
+                return prev.map(item =>
+                    item === existing ? { ...item, quantity: item.quantity + 1 } : item
+                );
+            } else {
+                return [...prev, newItem];
+            }
+        });
     };
 
     const removeFromCart = (index) => {

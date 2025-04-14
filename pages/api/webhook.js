@@ -38,10 +38,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Faltan datos en metadata o configuración no encontrada' });
     }
 
-    const total = cart.reduce((acc, item) => acc + (item.price || 0), 0);
+    const total = cart.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
 
     const detalle = cart.map((item, index) => {
-      return `${index + 1}. ${item.name} (${item.size}${item.flavor ? `, ${item.flavor}` : ''}) - $${item.price.toLocaleString('es-CL')}`;
+      return `${index + 1}. ${item.quantity}x ${item.name} (${item.size || ''}${item.flavor ? `, ${item.flavor}` : ''}) - $${(item.price * (item.quantity || 1)).toLocaleString('es-CL')}`;
     }).join(' • ');
 
     const entregaTexto =
@@ -114,7 +114,7 @@ export default async function handler(req, res) {
             <h2 style="margin-top: 30px;">🧾 Detalle:</h2>
             <ul style="text-align: left; display: inline-block; padding: 0; list-style: none;">
               ${cart.map((item, i) => `
-                <li>🍴 ${item.name} (${item.size}${item.flavor ? `, ${item.flavor}` : ''}) - $${item.price.toLocaleString('es-CL')}</li>
+              <li>🍴 ${item.quantity || 1}x ${item.name} (${item.size || ''}${item.flavor ? `, ${item.flavor}` : ''}) - $${(item.price * (item.quantity || 1)).toLocaleString('es-CL')}</li>
               `).join('')}
             </ul>
             <p style="margin-top: 15px; font-size: 18px;"><strong>Total:</strong> ${totalTexto}</p>
